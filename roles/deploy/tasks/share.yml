@@ -1,17 +1,6 @@
 ---
 - include: "{{ deploy_share_before | default('../hooks/example.yml') }}"
 
-- name: Check if project folders exist
-  stat:
-    path: "{{ deploy_helper.current_path }}/{{ item }}"
-  register: project_folder_paths
-  with_items: project_copy_folders
-
-- name: Copy project folders
-  command: cp -rp {{ deploy_helper.current_path }}/{{ item.item }} {{ deploy_helper.new_release_path }}
-  with_items: project_folder_paths.results
-  when: item.stat.exists == True
-
 - name: Ensure shared sources are present
   file:
     path: "{{ deploy_helper.shared_path }}/{{ item.src }}"
