@@ -35,7 +35,7 @@
     chdir: "{{ www_root }}/{{ item.key }}/current/"
   register: wp_install_results
   with_dict: wordpress_sites
-  when: item.value.site_install == True and (item.value.multisite.enabled | default(False) == False)
+  when: item.value.site_install and not item.value.multisite.enabled | default(false) and 'No rewrite rules' in wp_permalink_check_results.results.0.stderr
   changed_when: "'WordPress is already installed.' not in wp_install_results.stdout"
 
 - name: Setup Permalink Structure
